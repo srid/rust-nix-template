@@ -15,12 +15,20 @@
   outputs = { self, nixpkgs, utils, rust-overlay, naersk, ... }:
     utils.lib.eachDefaultSystem
       (system:
-        /* let pkgs = import nixpkgs {
-          inherit system;
-          overlays = [ rust-overlay.overlay ];
-        }; */
         let 
-          pkgs = nixpkgs.legacyPackages."${system}";
+          pkgs = import nixpkgs {
+            inherit system;
+            overlays = [ 
+              rust-overlay.overlay
+              (self: super: {
+                # Because rust-overlay bundles multple rust packages into one
+                # derivation, specify that mega-bundle here, so that naersk
+                # will use them automatically.
+                rustc = self.rust-bin.stable.latest.default;
+                cargo = self.rust-bin.stable.latest.default;
+              })
+            ];
+          };
           naersk-lib = naersk.lib."${system}";
         in rec {
           # `nix build`
@@ -41,21 +49,6 @@
             nativeBuildInputs = with pkgs; [ rustc cargo ];
             RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
           };
-          /* devShell = pkgs.mkShell {
-            nativeBuildInputs = [
-              (pkgs.rust-bin.stable.latest.default.override {
-                extensions = [
-                  "rust-src"
-                  "cargo"
-                  "rustc"
-                  "rls"
-                  "rust-analysis"
-                  "rustfmt"
-                  "clippy"
-                ];
-              })
-            ];
-          }; */
         }
       );
 }
