@@ -12,15 +12,26 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, rust-overlay, flake-compat }:
-    flake-utils.lib.eachDefaultSystem 
-      (system: 
+    flake-utils.lib.eachDefaultSystem
+      (system:
         let pkgs = import nixpkgs {
           inherit system;
-          overlays = [rust-overlay.overlay ];
-        }; in {
+          overlays = [ rust-overlay.overlay ];
+        }; in
+        {
           devShell = pkgs.mkShell {
             nativeBuildInputs = [
-              pkgs.rust-bin.stable.latest.default
+              (pkgs.rust-bin.stable.latest.default.override {
+                extensions = [
+                  "rust-src"
+                  "cargo"
+                  "rustc"
+                  "rls"
+                  "rust-analysis"
+                  "rustfmt"
+                  "clippy"
+                ];
+              })
             ];
           };
         }
