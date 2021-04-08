@@ -14,4 +14,5 @@ jobs:
         extra_nix_config: |
           experimental-features = nix-command flakes
     - run: nix develop -c rustc --version
+    - run: nix run . -- ping
     - run: nix-build

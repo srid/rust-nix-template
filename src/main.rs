@@ -1,4 +1,6 @@
 use std::fmt::{Display, Formatter};
+use clap::{App, SubCommand};
+
 
 enum VertDir {
     Up,
@@ -107,11 +109,18 @@ impl Display for Game {
 }
 
 fn main () {
-    let mut game = Game::new();
-    let sleep_duration = std::time::Duration::from_millis(33);
-    loop {
-        println!("{}", game);
-        game.step();
-        std::thread::sleep(sleep_duration);
+    let matches = App::new("bouncy")
+        .version("1.0")
+        .subcommand(SubCommand::with_name("ping")).get_matches();
+    if let Some(_matches) = matches.subcommand_matches("ping") {
+        println!("pong")
+    } else {
+        let mut game = Game::new();
+        let sleep_duration = std::time::Duration::from_millis(33);
+        loop {
+            println!("{}", game);
+            game.step();
+            std::thread::sleep(sleep_duration);
+        }
     }
 }
