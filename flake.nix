@@ -1,13 +1,12 @@
+# This file is pretty general, and you can adapt it in your project replacing
+# only `name` and `description` below.
+
 {
-  description = "bouncy";
+  description = "...";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     utils.url = "github:numtide/flake-utils";
-    gitignore = { 
-      url = "github:hercules-ci/gitignore"; 
-      flake=false; 
-    };
     rust-overlay.url = "github:oxalica/rust-overlay";
     crate2nix = {
       url = "github:balsoft/crate2nix/tools-nix-version-comparison";
@@ -19,17 +18,20 @@
     };
   };
 
-  outputs = { self, nixpkgs, utils, gitignore, rust-overlay, crate2nix, ... }:
-    utils.lib.eachDefaultSystem
+  outputs = { self, nixpkgs, utils, rust-overlay, crate2nix, ... }:
+    let 
+      name = "bouncy";
+    in utils.lib.eachDefaultSystem
       (system:
-        let 
+       let 
+          # Imports
           pkgs = import nixpkgs { 
             inherit system; 
             overlays = [ 
               rust-overlay.overlay
               (self: super: {
                 # Because rust-overlay bundles multiple rust packages into one
-                # derivation, specify that mega-bundle here, so that naersk
+                # derivation, specify that mega-bundle here, so that crate2nix
                 # will use them automatically.
                 rustc = self.rust-bin.stable.latest.default;
                 cargo = self.rust-bin.stable.latest.default;
@@ -38,32 +40,47 @@
           };
           inherit (import "${crate2nix}/tools.nix" { inherit pkgs; })
             generatedCargoNix;
-          inherit (import gitignore { inherit (pkgs) lib; }) gitignoreSource;
+
+          # Create the cargo2nix project
           project = pkgs.callPackage (generatedCargoNix {
-            name = "bouncy";
-            src = gitignoreSource ./.;
+            inherit name;
+            src = ./.;
           }) {
             # Individual crate overrides go here
             # Example: https://github.com/balsoft/simple-osd-daemons/blob/6f85144934c0c1382c7a4d3a2bbb80106776e270/flake.nix#L28-L50
+            defaultCrateOverrides = pkgs.defaultCrateOverrides // {
+              # The himalaya crate itself is overriden here. Typically we
+              # configure non-Rust dependencies (see below) here.
+              ${name} = oldAttrs: {
+                inherit buildInputs nativeBuildInputs;
+              } // buildEnvVars;
+            };
+          };
+
+          # Configuration for the non-Rust dependencies
+          buildInputs = with pkgs; [ openssl.dev ];
+          nativeBuildInputs = with pkgs; [ rustc cargo pkgconfig ];
+          buildEnvVars = {
+            PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
           };
         in rec {
-          packages.bouncy = project.rootCrate.build;
+          packages.${name} = project.rootCrate.build;
 
           # `nix build`
-          defaultPackage = packages.bouncy;
+          defaultPackage = packages.${name};
 
           # `nix run`
-          apps.bouncy = utils.lib.mkApp {
-            name = "bouncy";
-            drv = packages.bouncy;
+          apps.${name} = utils.lib.mkApp {
+            inherit name;
+            drv = packages.${name};
           };
-          defaultApp = apps.bouncy;
+          defaultApp = apps.${name};
 
           # `nix develop`
           devShell = pkgs.mkShell {
-            nativeBuildInputs = with pkgs; [ rustc cargo ];
+            inherit buildInputs nativeBuildInputs;
             RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
-          };
+          } // buildEnvVars;
         }
       );
 }
