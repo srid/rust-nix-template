@@ -33,9 +33,8 @@
             # Individual crate overrides go here
             # Example: https://github.com/balsoft/simple-osd-daemons/blob/6f85144934c0c1382c7a4d3a2bbb80106776e270/flake.nix#L28-L50
           };
-          packages = builtins.mapAttrs (name: member: member.build) project.workspaceMembers;
         in rec {
-          inherit packages;
+          packages.bouncy = project.rootCrate.build;
 
           # `nix build`
           defaultPackage = packages.bouncy;
