@@ -3,51 +3,45 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    rust-overlay.url = "github:oxalica/rust-overlay";
     utils.url = "github:numtide/flake-utils";
-    naersk.url = "github:nmattia/naersk";
+    crate2nix = {
+      url = "github:balsoft/crate2nix/tools-nix-version-comparison";
+      flake = false;
+    };
     flake-compat = {
       url = "github:edolstra/flake-compat";
       flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, utils, rust-overlay, naersk, ... }:
+  outputs = { self, nixpkgs, utils, crate2nix, ... }:
     utils.lib.eachDefaultSystem
       (system:
         let 
-          pkgs = import nixpkgs {
-            inherit system;
-            overlays = [ 
-              rust-overlay.overlay
-              (self: super: {
-                # Because rust-overlay bundles multple rust packages into one
-                # derivation, specify that mega-bundle here, so that naersk
-                # will use them automatically.
-                rustc = self.rust-bin.stable.latest.default;
-                cargo = self.rust-bin.stable.latest.default;
-              })
-            ];
+          pkgs = import nixpkgs { inherit system; };
+          inherit (import "${crate2nix}/tools.nix" { inherit pkgs; })
+            generatedCargoNix;
+          project = pkgs.callPackage (generatedCargoNix {
+            name = "bouncy";
+            src = ./.;
+          }) {
+            # Overrides go here
           };
-          naersk-lib = naersk.lib."${system}";
+          membersList = builtins.attrValues (builtins.mapAttrs (name: member: {
+            inherit name;
+            value = member.build;
+          }) project.workspaceMembers);
+          # naersk-lib = naersk.lib."${system}";
         in rec {
-          # `nix build`
-          packages.bouncy = naersk-lib.buildPackage {
-            pname = "bouncy";
-            root = ./.;
-          };
-          defaultPackage = packages.bouncy;
+          packages = builtins.listToAttrs membersList;
 
-          # `nix run`
-          apps.bouncy = utils.lib.mkApp {
-            drv = packages.bouncy;
-          };
-          defaultApp = apps.bouncy;
+          defaultPackage = packages.bouncy;
 
           # `nix develop`
           devShell = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [ rustc cargo ];
             RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
+            inputsFrom = builtins.attrValues packages.bouncy;
           };
         }
       );
