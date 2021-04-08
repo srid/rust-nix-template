@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     utils.url = "github:numtide/flake-utils";
+    gitignore = { 
+      url = "github:hercules-ci/gitignore"; 
+      flake=false; 
+    };
     crate2nix = {
       url = "github:balsoft/crate2nix/tools-nix-version-comparison";
       flake = false;
@@ -14,16 +18,17 @@
     };
   };
 
-  outputs = { self, nixpkgs, utils, crate2nix, ... }:
+  outputs = { self, nixpkgs, utils, gitignore, crate2nix, ... }:
     utils.lib.eachDefaultSystem
       (system:
         let 
           pkgs = import nixpkgs { inherit system; };
           inherit (import "${crate2nix}/tools.nix" { inherit pkgs; })
             generatedCargoNix;
+          inherit (import gitignore { inherit (pkgs) lib; }) gitignoreSource;
           project = pkgs.callPackage (generatedCargoNix {
             name = "bouncy";
-            src = ./.;
+            src = gitignoreSource ./.;
           }) {
             # Overrides go here
           };
@@ -41,7 +46,7 @@
           devShell = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [ rustc cargo ];
             RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
-            inputsFrom = builtins.attrValues packages.bouncy;
+            # inputsFrom = builtins.attrValues packages.bouncy;
           };
         }
       );
