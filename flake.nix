@@ -9,7 +9,7 @@
     utils.url = "github:numtide/flake-utils";
     rust-overlay.url = "github:oxalica/rust-overlay";
     crate2nix = {
-      url = "github:balsoft/crate2nix/tools-nix-version-comparison";
+      url = "github:kolloch/crate2nix";
       flake = false;
     };
     flake-compat = {
