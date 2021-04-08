@@ -8,6 +8,7 @@
       url = "github:hercules-ci/gitignore"; 
       flake=false; 
     };
+    rust-overlay.url = "github:oxalica/rust-overlay";
     crate2nix = {
       url = "github:balsoft/crate2nix/tools-nix-version-comparison";
       flake = false;
@@ -18,11 +19,23 @@
     };
   };
 
-  outputs = { self, nixpkgs, utils, gitignore, crate2nix, ... }:
+  outputs = { self, nixpkgs, utils, gitignore, rust-overlay, crate2nix, ... }:
     utils.lib.eachDefaultSystem
       (system:
         let 
-          pkgs = import nixpkgs { inherit system; };
+          pkgs = import nixpkgs { 
+            inherit system; 
+            overlays = [ 
+              rust-overlay.overlay
+              (self: super: {
+                # Because rust-overlay bundles multiple rust packages into one
+                # derivation, specify that mega-bundle here, so that naersk
+                # will use them automatically.
+                rustc = self.rust-bin.stable.latest.default;
+                cargo = self.rust-bin.stable.latest.default;
+              })
+            ];
+          };
           inherit (import "${crate2nix}/tools.nix" { inherit pkgs; })
             generatedCargoNix;
           inherit (import gitignore { inherit (pkgs) lib; }) gitignoreSource;
