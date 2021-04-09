@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "matklad.rust-analyzer"
+        "matklad.rust-analyzer",
+        "jnoortheen.nix-ide"
     ]
 }
