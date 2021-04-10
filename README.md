@@ -4,7 +4,8 @@ See [Nix-ifying Rust projects](https://notes.srid.ca/rust-nix) for details.
 
 ## Adapting this template
 
-Change `name` in Cargo.toml and flake.nix. Also change `description` in flake.nix.
+- Change `name` in Cargo.toml and flake.nix. Also change `description` in flake.nix.
+- There are two CI workflows, and one of them uses Nix which is slower than the other based on rustup. Pick one or the other depending on your trade-offs.
 
 ## Development (Flakes)
 
