@@ -20,7 +20,8 @@
 
   outputs = { self, nixpkgs, utils, rust-overlay, crate2nix, ... }:
     let
-      name = "bouncy";
+      # If you change the name here, you must also do it in Cargo.toml
+      name = "rust-nix-template";
     in
     utils.lib.eachDefaultSystem
       (system:

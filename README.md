@@ -1,5 +1,7 @@
 A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE support without doing anything (open in VSCode and accept the suggestions).
 
+See [Nix-ifying Rust projects](https://notes.srid.ca/rust-nix) for details.
+
 ## Adapting this template
 
 Change `name` in Cargo.toml and flake.nix. Also change `description` in flake.nix.
