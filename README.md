@@ -5,13 +5,13 @@ See [Nix-ifying Rust projects](https://notes.srid.ca/rust-nix) for details.
 ## Adapting this template
 
 - Change `name` in Cargo.toml and flake.nix. Also change `description` in flake.nix.
-- There are two CI workflows, and one of them uses Nix which is slower than the other based on rustup. Pick one or the other depending on your trade-offs.
+- There are two CI workflows, and one of them uses Nix which is slower (unless you configure a cache) than the other that is based on rustup. Pick one or the other depending on your trade-offs.
 
 ## Development (Flakes)
 
 This repo uses [Flakes](https://nixos.wiki/wiki/Flakes) from the get-go, but compat is provided for traditional nix-shell/nix-build as well (see the section below).
 
-```
+```bash
 # Dev shell
 nix develop
 
@@ -27,7 +27,7 @@ nix build
 
 ## Development (Legacy Nix)
 
-```
+```bash
 # Dev shell
 nix-shell
 

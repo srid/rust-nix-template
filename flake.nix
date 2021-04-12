@@ -63,7 +63,7 @@
 
           # Configuration for the non-Rust dependencies
           buildInputs = with pkgs; [ openssl.dev ];
-          nativeBuildInputs = with pkgs; [ rustc cargo pkgconfig nixpkgs-fmt ];
+          nativeBuildInputs = with pkgs; [ rustc cargo pkgconfig ];
         in
         rec {
           packages.${name} = project.rootCrate.build;
@@ -81,7 +81,14 @@
           # `nix develop`
           devShell = pkgs.mkShell
             {
-              inherit buildInputs nativeBuildInputs;
+              inputsFrom = builtins.attrValues self.packages.${system};
+              buildInputs = buildInputs ++ (with pkgs;
+                # Tools you need for development go here.
+                [
+                  nixpkgs-fmt
+                  cargo-watch
+                ]);
+              # FIXME: Is this correct? Should it use rust-overlay instead?
               RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
             };
         }
