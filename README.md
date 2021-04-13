@@ -37,3 +37,5 @@ nix-shell --run 'cargo run'
 # build
 nix-build
 ```
+
+There is a also a `bin/run` script which starts 'cargo watch'; and it is used by VSCode as well (`Ctrl+Shift+B`).
