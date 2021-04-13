@@ -22,6 +22,7 @@
     let
       # If you change the name here, you must also do it in Cargo.toml
       name = "rust-nix-template";
+      rustChannel = "stable";
     in
     utils.lib.eachDefaultSystem
       (system:
@@ -35,8 +36,8 @@
                 # Because rust-overlay bundles multiple rust packages into one
                 # derivation, specify that mega-bundle here, so that crate2nix
                 # will use them automatically.
-                rustc = self.rust-bin.stable.latest.default;
-                cargo = self.rust-bin.stable.latest.default;
+                rustc = self.rust-bin.${rustChannel}.latest.default;
+                cargo = self.rust-bin.${rustChannel}.latest.default;
               })
             ];
           };
@@ -87,9 +88,10 @@
                 [
                   nixpkgs-fmt
                   cargo-watch
+                  pkgs.rust-bin.${rustChannel}.latest.rust-analysis
+                  pkgs.rust-bin.${rustChannel}.latest.rls
                 ]);
-              # FIXME: Is this correct? Should it use rust-overlay instead?
-              RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
+              RUST_SRC_PATH = "${pkgs.rust-bin.${rustChannel}.latest.rust-src}/lib/rustlib/src/rust/library";
             };
         }
       );
