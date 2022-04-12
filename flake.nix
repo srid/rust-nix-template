@@ -94,5 +94,11 @@
               RUST_SRC_PATH = "${pkgs.rust-bin.${rustChannel}.latest.rust-src}/lib/rustlib/src/rust/library";
             };
         }
-      );
+      ) // {
+        defaultTemplate = {
+          path = ./.;
+          description = "A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE support without doing anything (open in VSCode and accept the suggestions).";
+          welcomeText = builtins.readFile ./README.md;
+        };
+      };
 }
