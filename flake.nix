@@ -22,6 +22,8 @@
     let
       # If you change the name here, you must also do it in Cargo.toml
       name = "rust-nix-template";
+      # Rust release channel to use.
+      # https://rust-lang.github.io/rustup/concepts/channels.html
       rustChannel = "stable";
     in
     utils.lib.eachDefaultSystem
