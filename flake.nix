@@ -43,6 +43,8 @@
               })
             ];
           };
+
+          # cf. https://github.com/kolloch/crate2nix/issues/110
           inherit (import "${crate2nix}/tools.nix" { inherit pkgs; })
             generatedCargoNix;
 
@@ -53,6 +55,9 @@
               src = ./.;
             })
             {
+              inherit pkgs;
+              buildRustCrate = null; # https://github.com/kolloch/crate2nix/pull/178#issuecomment-820692187
+
               # Individual crate overrides go here
               # Example: https://github.com/balsoft/simple-osd-daemons/blob/6f85144934c0c1382c7a4d3a2bbb80106776e270/flake.nix#L28-L50
               defaultCrateOverrides = pkgs.defaultCrateOverrides // {
