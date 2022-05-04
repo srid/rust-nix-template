@@ -1,6 +1,6 @@
-A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE support without doing anything (open in VSCode and accept the suggestions).
+A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE experience without any manual setup (just open in VSCode and accept the suggestions).
 
-See [Nix-ifying Rust projects](https://notes.srid.ca/rust-nix) for details.
+See [Nix-ifying Rust projects](https://srid.ca/rust-nix) for details.
 
 ## Adapting this template
 
