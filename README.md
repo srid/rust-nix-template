@@ -1,6 +1,6 @@
-A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE experience without any manual setup (just open in VSCode and accept the suggestions).
+A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE experience without any manual setup (just open in VSCode and accept the suggestions). Based on `dream2nix` and [nix-cargo-integration](https://github.com/yusdacra/nix-cargo-integration).
 
-See [Nix-ifying Rust projects](https://srid.ca/rust-nix) for details.
+Note: If you are looking for the original template based on [this blog post](https://srid.ca/rust-nix)'s use of `crate2nix`, you [this tag](https://github.com/srid/rust-nix-template/tree/crate2nix).
 
 ## Adapting this template
 
@@ -16,9 +16,6 @@ This repo uses [Flakes](https://nixos.wiki/wiki/Flakes) from the get-go, but com
 ```bash
 # Dev shell
 nix develop
-
-# or just run directly
-nix run
 
 # or run via cargo
 nix develop -c cargo run
