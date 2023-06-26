@@ -1,21 +1,21 @@
 use argh::FromArgs;
 
-#[derive(FromArgs)]
+#[derive(FromArgs, Debug)]
 /// Reach new heights.
-struct GoUp {
-    /// whether or not to jump
-    #[argh(switch, short = 'j')]
-    jump: bool,
+struct Config {
+    /// whether to be verbose
+    #[argh(switch, short = 'v')]
+    verbose: bool,
 
-    /// how high to go
+    /// an optional name to green
     #[argh(option)]
-    height: usize,
-
-    /// an optional nickname for the pilot
-    #[argh(option)]
-    pilot_nickname: Option<String>,
+    name: Option<String>,
 }
 
 fn main() {
-    let up: GoUp = argh::from_env();
+    let cfg: Config = argh::from_env();
+    if cfg.verbose {
+        println!("DEBUG {cfg:?}");
+    }
+    println!("Hello {}!", cfg.name.unwrap_or("world".to_string()));
 }
