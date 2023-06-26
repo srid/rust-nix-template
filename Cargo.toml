@@ -9,15 +9,3 @@ version = "0.1.0"
 
 [dependencies]
 clap = "2.33.3"
-
-[package.metadata.nix]
-app = true
-build = true
-library = true
-systems = [
-    "aarch64-linux",
-    "aarch64-darwin",
-    "i686-linux",
-    "x86_64-darwin",
-    "x86_64-linux",
-]
