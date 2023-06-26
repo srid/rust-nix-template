@@ -83,7 +83,10 @@
           };
 
           watch = {
-            exec = ''cargo watch -x run'';
+            exec = ''
+              set -x
+              cargo watch -x "run -- $*"
+            '';
             description = "Watch for changes and run the project executable";
           };
         };
