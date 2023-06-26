@@ -1,4 +1,4 @@
-A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE experience without any manual setup (just open in VSCode and accept the suggestions). Based on `dream2nix` and [nix-cargo-integration](https://github.com/yusdacra/nix-cargo-integration).
+A template Rust project with fully functional and no-frills Nix support (uses `dream2nix`), as well as builtin VSCode configuration to get IDE experience without any manual setup (just open in VSCode and accept the suggestions).
 
 Note: If you are looking for the original template based on [this blog post](https://srid.ca/rust-nix)'s use of `crate2nix`, browse from [this tag](https://github.com/srid/rust-nix-template/tree/crate2nix).
 
@@ -11,7 +11,7 @@ Note: If you are looking for the original template based on [this blog post](htt
 
 ## Development (Flakes)
 
-This repo uses [Flakes](https://nixos.wiki/wiki/Flakes) from the get-go, but compat is provided for traditional nix-shell/nix-build as well (see the section below).
+This repo uses [Flakes](https://nixos.wiki/wiki/Flakes) from the get-go.
 
 ```bash
 # Dev shell
@@ -24,17 +24,4 @@ nix develop -c cargo run
 nix build
 ```
 
-## Development (Legacy Nix)
-
-```bash
-# Dev shell
-nix-shell
-
-# run via cargo
-nix-shell --run 'cargo run'
-
-# build
-nix-build
-```
-
-There is also a `bin/run` script which starts 'cargo watch'; it is used by VSCode as well (`Ctrl+Shift+B`).
+There are also [mission-control](https://github.com/Platonic-Systems/mission-control) shell commands provided in the devShell.
