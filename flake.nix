@@ -76,7 +76,9 @@
           };
 
           run = {
-            exec = ''cargo run'';
+            exec = ''
+              cargo run "$@"
+            '';
             description = "Run the project executable";
           };
 
