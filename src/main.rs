@@ -1,7 +1,7 @@
 use argh::FromArgs;
 
 #[derive(FromArgs, Debug)]
-/// Reach new heights.
+/// Application configuration
 struct Config {
     /// whether to be verbose
     #[argh(switch, short = 'v')]
