@@ -1,4 +1,6 @@
 {
     "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    // https://twitter.com/sridca/status/1674947342607216641
+    // "editor.inlayHints.enabled": "offUnlessPressed",
 }
