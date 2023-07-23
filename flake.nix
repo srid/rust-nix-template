@@ -18,70 +18,76 @@
         inputs.mission-control.flakeModule
         inputs.flake-root.flakeModule
       ];
-      perSystem = { config, self', pkgs, lib, system, ... }: {
-        # Rust package
-        packages.default =
-          let
-            cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
-          in
-          pkgs.rustPlatform.buildRustPackage {
-            inherit (cargoToml.package) name version;
-            src = ./.;
-            cargoLock.lockFile = ./Cargo.lock;
-          };
+      perSystem = { config, self', pkgs, lib, system, ... }:
 
-        # Rust dev environment
-        devShells.default = pkgs.mkShell {
-          inputsFrom = [
-            config.treefmt.build.devShell
-            config.mission-control.devShell
-            config.flake-root.devShell
+        let
+          cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
+          nonRustDeps = [
+            pkgs.libiconv
           ];
-          shellHook = ''
-            # For rust-analyzer 'hover' tooltips to work.
-            export RUST_SRC_PATH=${pkgs.rustPlatform.rustLibSrc}
-          '';
-          nativeBuildInputs = with pkgs; [
-            rustc
-            cargo
-            cargo-watch
-            rust-analyzer
-          ];
-        };
+        in
+        {
+          # Rust package
+          packages.default =
+            pkgs.rustPlatform.buildRustPackage {
+              inherit (cargoToml.package) name version;
+              src = ./.;
+              cargoLock.lockFile = ./Cargo.lock;
+            };
 
-        # Add your auto-formatters here.
-        # cf. https://numtide.github.io/treefmt/
-        treefmt.config = {
-          projectRootFile = "flake.nix";
-          programs = {
-            nixpkgs-fmt.enable = true;
-            rustfmt.enable = true;
-          };
-        };
-
-        # Makefile'esque but in Nix. Add your dev scripts here.
-        # cf. https://github.com/Platonic-Systems/mission-control
-        mission-control.scripts = {
-          fmt = {
-            exec = config.treefmt.build.wrapper;
-            description = "Auto-format project tree";
-          };
-
-          run = {
-            exec = ''
-              cargo run "$@"
+          # Rust dev environment
+          devShells.default = pkgs.mkShell {
+            inputsFrom = [
+              config.treefmt.build.devShell
+              config.mission-control.devShell
+              config.flake-root.devShell
+            ];
+            shellHook = ''
+              # For rust-analyzer 'hover' tooltips to work.
+              export RUST_SRC_PATH=${pkgs.rustPlatform.rustLibSrc}
             '';
-            description = "Run the project executable";
+            buildInputs = nonRustDeps;
+            nativeBuildInputs = with pkgs; [
+              rustc
+              cargo
+              cargo-watch
+              rust-analyzer
+            ];
           };
 
-          watch = {
-            exec = ''
-              set -x
-              cargo watch -x "run -- $*"
-            '';
-            description = "Watch for changes and run the project executable";
+          # Add your auto-formatters here.
+          # cf. https://numtide.github.io/treefmt/
+          treefmt.config = {
+            projectRootFile = "flake.nix";
+            programs = {
+              nixpkgs-fmt.enable = true;
+              rustfmt.enable = true;
+            };
+          };
+
+          # Makefile'esque but in Nix. Add your dev scripts here.
+          # cf. https://github.com/Platonic-Systems/mission-control
+          mission-control.scripts = {
+            fmt = {
+              exec = config.treefmt.build.wrapper;
+              description = "Auto-format project tree";
+            };
+
+            run = {
+              exec = ''
+                cargo run "$@"
+              '';
+              description = "Run the project executable";
+            };
+
+            watch = {
+              exec = ''
+                set -x
+                cargo watch -x "run -- $*"
+              '';
+              description = "Watch for changes and run the project executable";
+            };
           };
         };
-      };
     };
 }
