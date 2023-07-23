@@ -1,21 +1,22 @@
-use argh::FromArgs;
+use clap::Parser;
 
-#[derive(FromArgs, Debug)]
+#[derive(Parser, Debug)]
+#[clap(author = "Sridhar Ratnakumar", version, about)]
 /// Application configuration
-struct Config {
+struct Args {
     /// whether to be verbose
-    #[argh(switch, short = 'v')]
+    #[arg(short = 'v')]
     verbose: bool,
 
     /// an optional name to green
-    #[argh(option)]
+    #[arg()]
     name: Option<String>,
 }
 
 fn main() {
-    let cfg: Config = argh::from_env();
-    if cfg.verbose {
-        println!("DEBUG {cfg:?}");
+    let args = Args::parse();
+    if args.verbose {
+        println!("DEBUG {args:?}");
     }
-    println!("Hello {}!", cfg.name.unwrap_or("world".to_string()));
+    println!("Hello {}!", args.name.unwrap_or("world".to_string()));
 }

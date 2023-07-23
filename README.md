@@ -1,4 +1,4 @@
-A template Rust project with fully functional and no-frills Nix support (uses `dream2nix`), as well as builtin VSCode configuration to get IDE experience without any manual setup (just open in VSCode and accept the suggestions).
+A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE experience without any manual setup (just open in VSCode and accept the suggestions).
 
 Note: If you are looking for the original template based on [this blog post](https://srid.ca/rust-nix)'s use of `crate2nix`, browse from [this tag](https://github.com/srid/rust-nix-template/tree/crate2nix).
 
@@ -24,4 +24,4 @@ nix develop -c cargo run
 nix build
 ```
 
-There are also [mission-control](https://github.com/Platonic-Systems/mission-control) shell commands provided in the devShell.
+We also provide a [`justfile`](https://just.systems/) for Makefile'esque commands.
