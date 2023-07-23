@@ -4,9 +4,6 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:nix-systems/default";
 
-    # Rust
-    dream2nix.url = "github:nix-community/dream2nix";
-
     # Dev tools
     treefmt-nix.url = "github:numtide/treefmt-nix";
     mission-control.url = "github:Platonic-Systems/mission-control";
@@ -17,32 +14,25 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
       imports = [
-        inputs.dream2nix.flakeModuleBeta
         inputs.treefmt-nix.flakeModule
         inputs.mission-control.flakeModule
         inputs.flake-root.flakeModule
       ];
       perSystem = { config, self', pkgs, lib, system, ... }: {
-        # Rust project definition
-        # cf. https://github.com/nix-community/dream2nix
-        dream2nix.inputs."rust-nix-template" = {
-          source = lib.sourceFilesBySuffices ./. [
-            ".rs"
-            "Cargo.toml"
-            "Cargo.lock"
-          ];
-          projects."rust-nix-template" = { name, ... }: {
-            inherit name;
-            subsystem = "rust";
-            translator = "cargo-lock";
+        # Rust package
+        packages.default =
+          let
+            cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
+          in
+          pkgs.rustPlatform.buildRustPackage {
+            inherit (cargoToml.package) name version;
+            src = ./.;
+            cargoLock.lockFile = ./Cargo.lock;
           };
-        };
 
-        # Flake outputs
-        packages = config.dream2nix.outputs.rust-nix-template.packages;
+        # Rust dev environment
         devShells.default = pkgs.mkShell {
           inputsFrom = [
-            config.dream2nix.outputs.rust-nix-template.devShells.default
             config.treefmt.build.devShell
             config.mission-control.devShell
             config.flake-root.devShell
@@ -51,9 +41,11 @@
             # For rust-analyzer 'hover' tooltips to work.
             export RUST_SRC_PATH=${pkgs.rustPlatform.rustLibSrc}
           '';
-          nativeBuildInputs = [
-            pkgs.cargo-watch
-            pkgs.rust-analyzer
+          nativeBuildInputs = with pkgs; [
+            rustc
+            cargo
+            cargo-watch
+            rust-analyzer
           ];
         };
 
