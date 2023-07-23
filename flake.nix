@@ -15,7 +15,6 @@
         inputs.treefmt-nix.flakeModule
       ];
       perSystem = { config, self', pkgs, lib, system, ... }:
-
         let
           cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
           nonRustDeps = [
@@ -24,12 +23,11 @@
         in
         {
           # Rust package
-          packages.default =
-            pkgs.rustPlatform.buildRustPackage {
-              inherit (cargoToml.package) name version;
-              src = ./.;
-              cargoLock.lockFile = ./Cargo.lock;
-            };
+          packages.default = pkgs.rustPlatform.buildRustPackage {
+            inherit (cargoToml.package) name version;
+            src = ./.;
+            cargoLock.lockFile = ./Cargo.lock;
+          };
 
           # Rust dev environment
           devShells.default = pkgs.mkShell {
