@@ -18,36 +18,6 @@
         "type": "github"
       }
     },
-    "flake-root": {
-      "locked": {
-        "lastModified": 1680964220,
-        "narHash": "sha256-dIdTYcf+KW9a4pKHsEbddvLVSfR1yiAJynzg2x0nfWg=",
-        "owner": "srid",
-        "repo": "flake-root",
-        "rev": "f1c0b93d05bdbea6c011136ba1a135c80c5b326c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "srid",
-        "repo": "flake-root",
-        "type": "github"
-      }
-    },
-    "mission-control": {
-      "locked": {
-        "lastModified": 1689802645,
-        "narHash": "sha256-USdf0MXZlllulmqhcqcLFQTt5FK1Lx3lQ7gxyZkz7Pk=",
-        "owner": "Platonic-Systems",
-        "repo": "mission-control",
-        "rev": "b48d201323df0ed2d4f05283139eaa6580ee7c39",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Platonic-Systems",
-        "repo": "mission-control",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1690031011,
@@ -101,8 +71,6 @@
     "root": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "flake-root": "flake-root",
-        "mission-control": "mission-control",
         "nixpkgs": "nixpkgs",
         "systems": "systems",
         "treefmt-nix": "treefmt-nix"

@@ -6,8 +6,6 @@
 
     # Dev tools
     treefmt-nix.url = "github:numtide/treefmt-nix";
-    mission-control.url = "github:Platonic-Systems/mission-control";
-    flake-root.url = "github:srid/flake-root";
   };
 
   outputs = inputs:
@@ -15,8 +13,6 @@
       systems = import inputs.systems;
       imports = [
         inputs.treefmt-nix.flakeModule
-        inputs.mission-control.flakeModule
-        inputs.flake-root.flakeModule
       ];
       perSystem = { config, self', pkgs, lib, system, ... }:
 
@@ -39,8 +35,6 @@
           devShells.default = pkgs.mkShell {
             inputsFrom = [
               config.treefmt.build.devShell
-              config.mission-control.devShell
-              config.flake-root.devShell
             ];
             shellHook = ''
               # For rust-analyzer 'hover' tooltips to work.
@@ -48,6 +42,7 @@
             '';
             buildInputs = nonRustDeps;
             nativeBuildInputs = with pkgs; [
+              just
               rustc
               cargo
               cargo-watch
@@ -62,30 +57,6 @@
             programs = {
               nixpkgs-fmt.enable = true;
               rustfmt.enable = true;
-            };
-          };
-
-          # Makefile'esque but in Nix. Add your dev scripts here.
-          # cf. https://github.com/Platonic-Systems/mission-control
-          mission-control.scripts = {
-            fmt = {
-              exec = config.treefmt.build.wrapper;
-              description = "Auto-format project tree";
-            };
-
-            run = {
-              exec = ''
-                cargo run "$@"
-              '';
-              description = "Run the project executable";
-            };
-
-            watch = {
-              exec = ''
-                set -x
-                cargo watch -x "run -- $*"
-              '';
-              description = "Watch for changes and run the project executable";
             };
           };
         };

@@ -24,4 +24,4 @@ nix develop -c cargo run
 nix build
 ```
 
-There are also [mission-control](https://github.com/Platonic-Systems/mission-control) shell commands provided in the devShell.
+We also provide a [`justfile`](https://just.systems/) for Makefile'esque commands.
