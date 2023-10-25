@@ -4,6 +4,11 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:nix-systems/default";
 
+    # Rust
+    nci.url = "github:yusdacra/nix-cargo-integration";
+    nci.inputs.nixpkgs.follows = "nixpkgs";
+    nci.inputs.parts.follows = "flake-parts";
+
     # Dev tools
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
@@ -12,26 +17,28 @@
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
       imports = [
+        inputs.nci.flakeModule
         inputs.treefmt-nix.flakeModule
       ];
       perSystem = { config, self', pkgs, lib, system, ... }:
         let
-          cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
-          nonRustDeps = [
-            pkgs.libiconv
-          ];
+          crateOutputs = config.nci.outputs."rust-nix-template";
         in
         {
-          # Rust package
-          packages.default = pkgs.rustPlatform.buildRustPackage {
-            inherit (cargoToml.package) name version;
-            src = ./.;
-            cargoLock.lockFile = ./Cargo.lock;
+          nci = {
+            projects."rust-nix-template".path = ./.;
+            crates = {
+              "rust-nix-template" = { };
+            };
           };
+
+          # Rust package
+          packages.default = crateOutputs.packages.release;
 
           # Rust dev environment
           devShells.default = pkgs.mkShell {
             inputsFrom = [
+              crateOutputs.devShell
               config.treefmt.build.devShell
             ];
             shellHook = ''
@@ -42,13 +49,12 @@
               echo "🍎🍎 Run 'just <recipe>' to get started"
               just
             '';
-            buildInputs = nonRustDeps;
             nativeBuildInputs = with pkgs; [
               just
-              rustc
-              cargo
-              cargo-watch
-              rust-analyzer
+              #rustc
+              #cargo
+              #cargo-watch
+              #rust-analyzer
             ];
           };
 
