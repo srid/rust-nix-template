@@ -51,10 +51,7 @@
             '';
             nativeBuildInputs = with pkgs; [
               just
-              #rustc
-              #cargo
-              #cargo-watch
-              #rust-analyzer
+              cargo-watch
             ];
           };
 
