@@ -26,3 +26,7 @@ nix build
 ```
 
 We also provide a [`justfile`](https://just.systems/) for Makefile'esque commands.
+
+## See Also
+
+- [nixos.wiki: Packaging Rust projects with nix](https://nixos.wiki/wiki/Rust#Packaging_Rust_projects_with_nix)
