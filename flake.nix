@@ -20,6 +20,10 @@
           nonRustDeps = [
             pkgs.libiconv
           ];
+          rust-toolchain = pkgs.symlinkJoin {
+            name = "rust-toolchain";
+            paths = [pkgs.rustc pkgs.cargo pkgs.cargo-watch pkgs.rustPlatform.rustcSrc];
+          };
         in
         {
           # Rust package
@@ -45,11 +49,10 @@
             buildInputs = nonRustDeps;
             nativeBuildInputs = with pkgs; [
               just
-              rustc
-              cargo
-              cargo-watch
               rust-analyzer
+              rust-toolchain
             ];
+            RUST_BACKTRACE = 1;
           };
 
           # Add your auto-formatters here.
