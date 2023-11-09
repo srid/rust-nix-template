@@ -22,7 +22,7 @@
           ];
           rust-toolchain = pkgs.symlinkJoin {
             name = "rust-toolchain";
-            paths = [pkgs.rustc pkgs.cargo pkgs.cargo-watch pkgs.rustPlatform.rustcSrc];
+            paths = [ pkgs.rustc pkgs.cargo pkgs.cargo-watch pkgs.rustPlatform.rustcSrc ];
           };
         in
         {
