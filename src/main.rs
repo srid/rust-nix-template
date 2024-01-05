@@ -8,7 +8,7 @@ struct Args {
     #[arg(short = 'v')]
     verbose: bool,
 
-    /// an optional name to green
+    /// an optional name to greet
     #[arg()]
     name: Option<String>,
 }
