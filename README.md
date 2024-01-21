@@ -27,6 +27,10 @@ nix build
 
 We also provide a [`justfile`](https://just.systems/) for Makefile'esque commands.
 
+## Discussion
+
+- [Zulip](https://nixos.zulipchat.com/#narrow/stream/413950-nix)
+
 ## See Also
 
 - [nixos.wiki: Packaging Rust projects with nix](https://nixos.wiki/wiki/Rust#Packaging_Rust_projects_with_nix)
