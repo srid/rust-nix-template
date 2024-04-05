@@ -1,8 +1,10 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     systems.url = "github:nix-systems/default";
+    rust-flake.url = "github:juspay/rust-flake";
+    rust-flake.inputs.nixpkgs.follows = "nixpkgs";
 
     # Dev tools
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -13,56 +15,30 @@
       systems = import inputs.systems;
       imports = [
         inputs.treefmt-nix.flakeModule
+        inputs.rust-flake.flakeModules.default
+        inputs.rust-flake.flakeModules.nixpkgs
       ];
-      perSystem = { config, self', pkgs, lib, system, ... }:
-        let
-          cargoToml = builtins.fromTOML (builtins.readFile ./Cargo.toml);
-          nonRustDeps = [
-            pkgs.libiconv
-          ];
-          rust-toolchain = pkgs.symlinkJoin {
-            name = "rust-toolchain";
-            paths = [ pkgs.rustc pkgs.cargo pkgs.cargo-watch pkgs.rust-analyzer pkgs.rustPlatform.rustcSrc ];
-          };
-        in
-        {
-          # Rust package
-          packages.default = pkgs.rustPlatform.buildRustPackage {
-            inherit (cargoToml.package) name version;
-            src = ./.;
-            cargoLock.lockFile = ./Cargo.lock;
-          };
+      perSystem = { config, self', pkgs, lib, system, ... }: {
+        rust-project.crane.args = {
+          buildInputs = lib.optionals pkgs.stdenv.isDarwin (
+            with pkgs.darwin.apple_sdk.frameworks; [
+              IOKit
+            ]
+          );
+        };
 
-          # Rust dev environment
-          devShells.default = pkgs.mkShell {
-            inputsFrom = [
-              config.treefmt.build.devShell
-            ];
-            shellHook = ''
-              # For rust-analyzer 'hover' tooltips to work.
-              export RUST_SRC_PATH=${pkgs.rustPlatform.rustLibSrc}
-
-              echo
-              echo "🍎🍎 Run 'just <recipe>' to get started"
-              just
-            '';
-            buildInputs = nonRustDeps;
-            nativeBuildInputs = with pkgs; [
-              just
-              rust-toolchain
-            ];
-            RUST_BACKTRACE = 1;
-          };
-
-          # Add your auto-formatters here.
-          # cf. https://numtide.github.io/treefmt/
-          treefmt.config = {
-            projectRootFile = "flake.nix";
-            programs = {
-              nixpkgs-fmt.enable = true;
-              rustfmt.enable = true;
-            };
+        # Add your auto-formatters here.
+        # cf. https://numtide.github.io/treefmt/
+        treefmt.config = {
+          projectRootFile = "flake.nix";
+          programs = {
+            nixpkgs-fmt.enable = true;
+            rustfmt.enable = true;
           };
         };
+
+        devShells.default = self'.devShells.rust-nix-template;
+        packages.default = self'.packages.rust-nix-template;
+      };
     };
 }

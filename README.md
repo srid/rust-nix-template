@@ -1,6 +1,6 @@
-A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE experience without any manual setup (just [install direnv](https://nixos.asia/en/direnv), open in VSCode and accept the suggestions).
+A template Rust project with fully functional and no-frills Nix support, as well as builtin VSCode configuration to get IDE experience without any manual setup (just [install direnv](https://nixos.asia/en/direnv), open in VSCode and accept the suggestions). It uses [crane](https://crane.dev/), via [rust-flake](https://github.com/juspay/rust-flake).
 
->[!NOTE]  
+> [!NOTE]
 > If you are looking for the original template based on [this blog post](https://srid.ca/rust-nix)'s use of `crate2nix`, browse from [this tag](https://github.com/srid/rust-nix-template/tree/crate2nix). The evolution of this template can be gleaned from [releases](https://github.com/srid/rust-nix-template/releases).
 
 ## Adapting this template
@@ -12,7 +12,7 @@ A template Rust project with fully functional and no-frills Nix support, as well
 
 ## Development (Flakes)
 
-This repo uses [Flakes](https://nixos.wiki/wiki/Flakes) from the get-go.
+This repo uses [Flakes](https://nixos.asia/en/flakes) from the get-go.
 
 ```bash
 # Dev shell
@@ -33,4 +33,4 @@ We also provide a [`justfile`](https://just.systems/) for Makefile'esque command
 
 ## See Also
 
-- [nixos.wiki: Packaging Rust projects with nix](https://nixos.wiki/wiki/Rust#Packaging_Rust_projects_with_nix)
+- [nixos.wiki: Packaging Rust projects with nix](https://wiki.nixos.org/wiki/Rust#Packaging_Rust_projects_with_nix)
