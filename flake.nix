@@ -37,7 +37,10 @@
           };
         };
 
-        devShells.default = self'.devShells.rust-nix-template;
+        devShells.default = pkgs.mkShell {
+          inputsFrom = [ self'.devShells.rust-nix-template ];
+          packages = [ pkgs.cargo-watch ];
+        };
         packages.default = self'.packages.rust-nix-template;
       };
     };
