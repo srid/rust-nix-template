@@ -10,18 +10,19 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 
-  outputs = inputs:
-    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = import inputs.systems;
+
+  outputs = { self, nixpkgs, flake-parts, systems, rust-flake, treefmt-nix }@inputs:
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = import systems;
       imports = [
-        inputs.treefmt-nix.flakeModule
-        inputs.rust-flake.flakeModules.default
-        inputs.rust-flake.flakeModules.nixpkgs
+        treefmt-nix.flakeModule
+        rust-flake.flakeModules.default
+        rust-flake.flakeModules.nixpkgs
       ];
       perSystem = { config, self', pkgs, lib, system, ... }: {
         rust-project.crane.args = {
-          buildInputs = lib.optionals pkgs.stdenv.isDarwin (
-            with pkgs.darwin.apple_sdk.frameworks; [
+          buildInputs = with pkgs; lib.optionals stdenv.isDarwin (
+            with darwin.apple_sdk.frameworks; [
               IOKit
             ]
           );
@@ -37,9 +38,9 @@
           };
         };
 
-        devShells.default = pkgs.mkShell {
+        devShells.default = with pkgs; mkShell {
           inputsFrom = [ self'.devShells.rust-nix-template ];
-          packages = [ pkgs.cargo-watch ];
+          packages = [ cargo-watch ];
         };
         packages.default = self'.packages.rust-nix-template;
       };
