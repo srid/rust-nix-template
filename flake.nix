@@ -18,7 +18,7 @@
         inputs.rust-flake.flakeModules.default
         inputs.rust-flake.flakeModules.nixpkgs
       ];
-      perSystem = { config, self', pkgs, lib, system, ... }: {
+      perSystem = { self', pkgs, lib, ... }: {
         rust-project.crane.args = {
           buildInputs = lib.optionals pkgs.stdenv.isDarwin (
             with pkgs.darwin.apple_sdk.frameworks; [
@@ -28,7 +28,7 @@
         };
 
         # Add your auto-formatters here.
-        # cf. https://numtide.github.io/treefmt/
+        # cf. https://nixos.asia/en/treefmt
         treefmt.config = {
           projectRootFile = "flake.nix";
           programs = {
