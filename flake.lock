@@ -1,5 +1,20 @@
 {
   "nodes": {
+    "cargo-doc-live": {
+      "locked": {
+        "lastModified": 1717703956,
+        "narHash": "sha256-Uf9mO5mCRUum3XVsEfPVg4bu74u/mBhXDr1ec0nTy2Y=",
+        "owner": "srid",
+        "repo": "cargo-doc-live",
+        "rev": "8bfee314e834b1e7cdb9b51b51a3cf1135fd36d8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "srid",
+        "repo": "cargo-doc-live",
+        "type": "github"
+      }
+    },
     "crane": {
       "inputs": {
         "nixpkgs": [
@@ -118,10 +133,27 @@
         "type": "github"
       }
     },
+    "process-compose-flake": {
+      "locked": {
+        "lastModified": 1717682476,
+        "narHash": "sha256-EjmlQSBs6XxsOEk7KQSpk2m/mkRtUpH++jZQix2jFgE=",
+        "owner": "Platonic-Systems",
+        "repo": "process-compose-flake",
+        "rev": "8a6fae467d4862f2be9aa2954ab2d1e324c399f4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Platonic-Systems",
+        "repo": "process-compose-flake",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
+        "cargo-doc-live": "cargo-doc-live",
         "flake-parts": "flake-parts",
         "nixpkgs": "nixpkgs",
+        "process-compose-flake": "process-compose-flake",
         "rust-flake": "rust-flake",
         "systems": "systems_2",
         "treefmt-nix": "treefmt-nix"

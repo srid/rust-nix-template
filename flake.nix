@@ -5,6 +5,8 @@
     systems.url = "github:nix-systems/default";
     rust-flake.url = "github:juspay/rust-flake";
     rust-flake.inputs.nixpkgs.follows = "nixpkgs";
+    process-compose-flake.url = "github:Platonic-Systems/process-compose-flake";
+    cargo-doc-live.url = "github:srid/cargo-doc-live";
 
     # Dev tools
     treefmt-nix.url = "github:numtide/treefmt-nix";
@@ -17,8 +19,10 @@
         inputs.treefmt-nix.flakeModule
         inputs.rust-flake.flakeModules.default
         inputs.rust-flake.flakeModules.nixpkgs
+        inputs.process-compose-flake.flakeModule
+        inputs.cargo-doc-live.flakeModule
       ];
-      perSystem = { self', pkgs, lib, ... }: {
+      perSystem = { config, self', pkgs, lib, ... }: {
         rust-project.crane.args = {
           buildInputs = lib.optionals pkgs.stdenv.isDarwin (
             with pkgs.darwin.apple_sdk.frameworks; [
@@ -39,7 +43,10 @@
 
         devShells.default = pkgs.mkShell {
           inputsFrom = [ self'.devShells.rust-nix-template ];
-          packages = [ pkgs.cargo-watch ];
+          packages = [
+            pkgs.cargo-watch
+            config.process-compose.cargo-doc-live.outputs.package
+          ];
         };
         packages.default = self'.packages.rust-nix-template;
       };
