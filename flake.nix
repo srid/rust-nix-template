@@ -23,7 +23,7 @@
         inputs.cargo-doc-live.flakeModule
       ];
       perSystem = { config, self', pkgs, lib, ... }: {
-        rust-project.crane.args = {
+        rust-project.crates."rust-nix-template".crane.args = {
           buildInputs = lib.optionals pkgs.stdenv.isDarwin (
             with pkgs.darwin.apple_sdk.frameworks; [
               IOKit
@@ -42,7 +42,7 @@
         };
 
         devShells.default = pkgs.mkShell {
-          inputsFrom = [ self'.devShells.rust-nix-template ];
+          inputsFrom = [ self'.devShells.rust ];
           packages = [
             pkgs.cargo-watch
             config.process-compose.cargo-doc-live.outputs.package
