@@ -25,7 +25,7 @@ nix develop -c cargo run
 nix build
 ```
 
-We also provide a [`justfile`](https://just.systems/) for Makefile'esque commands.
+We also provide a [`justfile`](https://just.systems/) for Makefile'esque commands to be run inside of the devShell.
 
 ## Discussion
 
