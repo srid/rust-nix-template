@@ -3,6 +3,7 @@ authors = ["Sridhar Ratnakumar <srid@srid.ca>"]
 edition = "2021"
 # If you change the name here, you must also do it in flake.nix (and run `cargo generate-lockfile` afterwards)
 name = "rust-nix-template"
+description = "A simple Rust project using Nix"
 version = "0.1.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
