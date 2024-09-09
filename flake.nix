@@ -16,43 +16,12 @@
   outputs = inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       systems = import inputs.systems;
-      imports = [
-        inputs.treefmt-nix.flakeModule
-        inputs.rust-flake.flakeModules.default
-        inputs.rust-flake.flakeModules.nixpkgs
-        inputs.process-compose-flake.flakeModule
-        inputs.cargo-doc-live.flakeModule
-      ];
-      perSystem = { config, self', pkgs, lib, ... }: {
-        rust-project.crates."rust-nix-template".crane.args = {
-          buildInputs = lib.optionals pkgs.stdenv.isDarwin (
-            with pkgs.darwin.apple_sdk.frameworks; [
-              IOKit
-            ]
-          );
-        };
 
-        # Add your auto-formatters here.
-        # cf. https://nixos.asia/en/treefmt
-        treefmt.config = {
-          projectRootFile = "flake.nix";
-          programs = {
-            nixpkgs-fmt.enable = true;
-            rustfmt.enable = true;
-          };
-        };
+      # See ./nix/modules/*.nix for the modules that are imported here.
+      imports = with builtins;
+        map
+          (fn: ./nix/modules/${fn})
+          (attrNames (readDir ./nix/modules));
 
-        devShells.default = pkgs.mkShell {
-          inputsFrom = [
-            self'.devShells.rust
-            config.treefmt.build.devShell
-          ];
-          packages = [
-            pkgs.cargo-watch
-            config.process-compose.cargo-doc-live.outputs.package
-          ];
-        };
-        packages.default = self'.packages.rust-nix-template;
-      };
     };
 }
