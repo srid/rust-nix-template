@@ -33,4 +33,4 @@ We also provide a [`justfile`](https://just.systems/) for Makefile'esque command
 
 ## See Also
 
-- [nixos.wiki: Packaging Rust projects with nix](https://wiki.nixos.org/wiki/Rust#Packaging_Rust_projects_with_nix)
+- [nixos.wiki: Packaging Rust projects with nix](https://nixos.wiki/wiki/Rust#Packaging_Rust_projects_with_nix)
