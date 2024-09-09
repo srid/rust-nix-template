@@ -18,5 +18,8 @@ fn main() {
     if args.verbose {
         println!("DEBUG {args:?}");
     }
-    println!("Hello {} (from rust-nix-template)!", args.name.unwrap_or("world".to_string()));
+    println!(
+        "Hello {} (from rust-nix-template)!",
+        args.name.unwrap_or("world".to_string())
+    );
 }
