@@ -6,8 +6,9 @@
         self'.devShells.rust
         config.treefmt.build.devShell
       ];
-      packages = [
-        pkgs.cargo-watch
+      packages = with pkgs; [
+        nixd # Nix language server
+        cargo-watch
         config.process-compose.cargo-doc-live.outputs.package
       ];
     };
