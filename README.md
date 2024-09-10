@@ -3,12 +3,22 @@ A template Rust project with fully functional and no-frills Nix support, as well
 > [!NOTE]
 > If you are looking for the original template based on [this blog post](https://srid.ca/rust-nix)'s use of `crate2nix`, browse from [this tag](https://github.com/srid/rust-nix-template/tree/crate2nix). The evolution of this template can be gleaned from [releases](https://github.com/srid/rust-nix-template/releases).
 
+## Usage
+
+You can use [omnix](https://omnix.page/om/init.html)[^omnix] to initialize this template:
+```
+$ mkdir ~/my-rust-project && cd ~/my-rust-project
+$ nix --accept-flake-config run github:juspay/omnix -- init rust-nix-template -o .
+```
+
+[^omnix]: If initializing manually, make sure to:
+    - Change `name` in Cargo.toml.
+    - Run `cargo generate-lockfile` in the nix shelld
+
 ## Adapting this template
 
-- Run `nix develop` to have a working shell ready before name change.
-- Change `name` in Cargo.toml.
-- Run `cargo generate-lockfile` in the nix shell
-- There are two CI workflows, and one of them uses Nix which is slower (unless you configure a cache) than the other that is based on rustup. Pick one or the other depending on your trade-offs.
+
+- There are two CI workflows, and one of them uses Nix which is slower (unless you configure a cache) than the other one based on rustup. Pick one or the other depending on your trade-offs.
 
 ## Development (Flakes)
 
