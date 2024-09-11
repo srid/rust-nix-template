@@ -2,6 +2,7 @@
 {
   perSystem = { config, self', pkgs, lib, ... }: {
     devShells.default = pkgs.mkShell {
+      name = "rust-nix-template-shell";
       inputsFrom = [
         self'.devShells.rust
         config.treefmt.build.devShell
