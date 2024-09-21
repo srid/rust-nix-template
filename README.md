@@ -8,7 +8,7 @@ A template Rust project with fully functional and no-frills Nix support, as well
 You can use [omnix](https://omnix.page/om/init.html)[^omnix] to initialize this template:
 ```
 $ mkdir ~/my-rust-project && cd ~/my-rust-project
-$ nix --accept-flake-config run github:juspay/omnix -- init rust-nix-template -o .
+$ nix --accept-flake-config run github:juspay/omnix -- init github:srid/rust-nix-template -o .
 ```
 
 [^omnix]: If initializing manually, make sure to:
