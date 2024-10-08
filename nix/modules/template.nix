@@ -45,6 +45,27 @@
           value = false;
         }
       ];
+      tests = {
+        default = {
+          params = {
+            package-name = "qux";
+            author = "John";
+            author-email = "john@example.com";
+          };
+          asserts = {
+            source = {
+              "Cargo.toml" = true;
+              "flake.nix" = true;
+              ".github/workflows/ci.yml" = true;
+              ".vscode" = true;
+              "nix/modules/template.nix" = false;
+            };
+            packages.default = {
+              "bin/qux" = true;
+            };
+          };
+        };
+      };
     };
   };
 }
