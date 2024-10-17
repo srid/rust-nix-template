@@ -7,9 +7,7 @@ A template Rust project with fully functional and no-frills Nix support, as well
 
 You can use [omnix](https://omnix.page/om/init.html)[^omnix] to initialize this template:
 ```
-DIR=~/my-rust-project
-mkdir $DIR && cd $DIR
-nix --accept-flake-config run github:juspay/omnix -- init github:srid/rust-nix-template -o .
+nix --accept-flake-config run github:juspay/omnix -- init github:srid/rust-nix-template -o ~/my-rust-project
 ```
 
 [^omnix]: If initializing manually, make sure to:
@@ -17,7 +15,6 @@ nix --accept-flake-config run github:juspay/omnix -- init github:srid/rust-nix-t
     - Run `cargo generate-lockfile` in the nix shelld
 
 ## Adapting this template
-
 
 - There are two CI workflows, and one of them uses Nix which is slower (unless you configure a cache) than the other one based on rustup. Pick one or the other depending on your trade-offs.
 
