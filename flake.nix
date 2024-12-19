@@ -11,6 +11,9 @@
 
     # Dev tools
     treefmt-nix.url = "github:numtide/treefmt-nix";
+
+    git-hooks.url = "github:cachix/git-hooks.nix";
+    git-hooks.flake = false;
   };
 
   outputs = inputs:
@@ -22,6 +25,5 @@
         map
           (fn: ./nix/modules/${fn})
           (attrNames (readDir ./nix/modules));
-
     };
 }

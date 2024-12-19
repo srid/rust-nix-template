@@ -5,6 +5,10 @@ default:
 fmt:
     treefmt
 
+# Runs pre-commit
+pre-commit:
+	pre-commit run -a
+
 # Run 'cargo run' on the project
 run *ARGS:
     cargo run {{ARGS}}
