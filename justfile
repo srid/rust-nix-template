@@ -3,11 +3,7 @@ default:
 
 # Auto-format the source tree
 fmt:
-    treefmt
-
-# Runs pre-commit
-pre-commit:
-	pre-commit run -a
+	pre-commit run --all-files
 
 # Run 'cargo run' on the project
 run *ARGS:
