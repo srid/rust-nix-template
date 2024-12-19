@@ -10,7 +10,7 @@
       packages = with pkgs; [
         just
         nixd # Nix language server
-        cargo-watch
+        bacon
         config.process-compose.cargo-doc-live.outputs.package
       ];
     };
