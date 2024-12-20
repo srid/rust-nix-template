@@ -5,7 +5,7 @@
       name = "rust-nix-template-shell";
       inputsFrom = [
         self'.devShells.rust
-        config.pre-commit.devShell # See ./nix/modules/formatter.nix
+        config.pre-commit.devShell # See ./nix/modules/pre-commit.nix
       ];
       packages = with pkgs; [
         just
