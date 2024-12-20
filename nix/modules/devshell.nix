@@ -5,7 +5,7 @@
       name = "rust-nix-template-shell";
       inputsFrom = [
         self'.devShells.rust
-        config.treefmt.build.devShell
+        config.pre-commit.devShell # See ./nix/modules/pre-commit.nix
       ];
       packages = with pkgs; [
         just
