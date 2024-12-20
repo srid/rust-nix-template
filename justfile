@@ -1,9 +1,9 @@
 default:
     @just --list
 
-# Auto-format the source tree
-fmt:
-	pre-commit run --all-files
+# Run pre-commit hooks on all files, including autoformatting
+pre-commit-all:
+    pre-commit run --all-files
 
 # Run 'cargo run' on the project
 run *ARGS:
