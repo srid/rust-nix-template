@@ -6,11 +6,9 @@
   ];
   perSystem = { config, self', pkgs, lib, ... }: {
     rust-project.crates."rust-nix-template".crane.args = {
-      buildInputs = lib.optionals pkgs.stdenv.isDarwin (
-        with pkgs.darwin.apple_sdk.frameworks; [
-          IOKit
-        ]
-      );
+      # On darwin, you may need framework dependencies like IOKit.
+      # The default SDK now provides these automatically - no need to specify them.
+      # buildInputs = lib.optionals pkgs.stdenv.isDarwin [ pkgs.apple-sdk ];
     };
     packages.default = self'.packages.rust-nix-template;
   };
