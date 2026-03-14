@@ -1,0 +1,39 @@
+name: Update Flake
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+
+      - uses: DeterminateSystems/update-flake-lock@main
+        id: update
+        with:
+          pr-title: "chore(flake): update inputs"
+          commit-msg: "chore(flake): update inputs"
+          pr-labels: dependencies
+          pr-assignees: ${{ github.repository_owner }}
+
+      - name: Enable auto-merge
+        if: steps.update.outputs.pull-request-number != ''
+        run: |
+          gh pr merge --auto --squash "${{ steps.update.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Wait for CI
+        if: steps.update.outputs.pull-request-number != ''
+        run: |
+          gh pr checks "${{ steps.update.outputs.pull-request-number }}" --watch --fail-fast
+        env:
+          GH_TOKEN: ${{ github.token }}
