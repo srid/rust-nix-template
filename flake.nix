@@ -6,8 +6,6 @@
     systems.url = "github:nix-systems/default";
     rust-flake.url = "github:juspay/rust-flake";
     rust-flake.inputs.nixpkgs.follows = "nixpkgs";
-    process-compose-flake.url = "github:Platonic-Systems/process-compose-flake";
-    cargo-doc-live.url = "github:srid/cargo-doc-live";
 
     git-hooks.url = "github:cachix/git-hooks.nix";
     git-hooks.flake = false;
