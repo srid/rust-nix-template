@@ -1,20 +1,5 @@
 {
   "nodes": {
-    "cargo-doc-live": {
-      "locked": {
-        "lastModified": 1724704668,
-        "narHash": "sha256-kJFYXlWUodg5WhJ0NuvrP0mCvOT/2AOIo8oGeYLXocs=",
-        "owner": "srid",
-        "repo": "cargo-doc-live",
-        "rev": "b09d5d258d2498829e03014931fc19aed499b86f",
-        "type": "github"
-      },
-      "original": {
-        "owner": "srid",
-        "repo": "cargo-doc-live",
-        "type": "github"
-      }
-    },
     "crane": {
       "locked": {
         "lastModified": 1772560058,
@@ -99,7 +84,6 @@
     },
     "root": {
       "inputs": {
-        "cargo-doc-live": "cargo-doc-live",
         "flake-parts": "flake-parts",
         "git-hooks": "git-hooks",
         "nixpkgs": "nixpkgs",
